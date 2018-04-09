@@ -1,0 +1,37 @@
+version: '2'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+
+#   blog-backend:
+#     image: jameshagerman/zenpirate:blog-backend-${npm_package_dockerVersions_api}
+#     build:
+#       context: ./services/api
+#     ports:
+#       - "3030:3030"
+#     links:
+#       - "mongo"
+#     environment:
+#       - "NODE_ENV=production" # Docker is only used in "production"
+# #      - "HOST=zenpirate.com" # TODO: Reconsider what host to use in prod
+#       - "PORT=3030"
+#       - "DB_HOST=mongo"
+#       - "DB_PORT=27017"
+#       - "DB_TABLE=zendb"
+#     restart: unless-stopped
+
+#   blog:
+#     image: jameshagerman/zenpirate:blog-${npm_package_dockerVersions_blog}
+#     build:
+#       context: ./apps/blog
+#     ports:
+#       - "80:80"
+#     links:
+#       - blog-backend
+#     restart: unless-stopped
+

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import '@blueprintjs/core/dist/blueprint.css'
-import '@blueprintjs/core/dist/blueprint-icons.css'
+// import '@blueprintjs/core/dist/blueprint-icons.css'
 
 import { Button, Intent, Spinner, DatePickerFactory } from '@blueprintjs/core';
 

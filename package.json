@@ -1,0 +1,20 @@
+{
+  "name": "Groc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start:api": "cd api/ && yarn run start",
+    "start:app": "cd app/ && yarn run start",
+    "start:db": "docker-compose up -d db",
+    "build": "cd app/ && yarn install && yarn run build",
+    "docker:build": "docker-compose build",
+    "docker:push": "docker-compose push",
+    "docker:up": "docker-compose up",
+    "docker:down": "docker-compose down",
+    "docker:clean": "docker-compose down --rmi all -v",
+    "db:seed": "cd api/ && yarn run db:seed"
+  },
+  "repository": "git@github.com:JamesHagerman/Groc.git",
+  "author": "James Hagerman <james.hagerman@gmail.com>",
+  "license": "MIT"
+}
