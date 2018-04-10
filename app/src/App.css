@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -16,10 +16,15 @@
 
 .App-intro {
   font-size: large;
-}
+} */
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
+
+.pt-dark {
+    background-color: rgb(41, 55, 66);
+    height: 100%;
+}
