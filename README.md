@@ -22,10 +22,12 @@ It'll remember everything you've put in (asuming you'r using the same device as 
 
 ## Building Groc
 
-Right now, all of the relavant bits are in `app/`. It's just a React app built on top of `create-react-app`. I used `yarn`. `npm` should work, but you're on your own.
+Right now, all of the relavant bits are in `app/`. It's just a React app built on top of `create-react-app`. I use `yarn` but `npm` should work.
+
+Running this build will compile the front end code to `docs/` so it can be hosted on GitHub Pages.
 
 ```
-npm run build
+yarn run build
 ```
 
 Some day, maybe it'll get some more features that depend on a backend and that's what's kicking around in `api/` right now.
