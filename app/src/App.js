@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import '@blueprintjs/core/lib/css/blueprint.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
 import { Checkbox, Button, Collapse, Intent } from '@blueprintjs/core';
@@ -8,18 +7,28 @@ import {SortableContainer, SortableElement, SortableHandle, arrayMove} from 'rea
 import croc from './croc.png'
 import './App.css';
 
-const DragHandle = SortableHandle(() => <span>::</span>); // This can be any component you want
+const initialState = {
+  itemList: [],
+  toAdd: '',
+  sotableDisabled: true,
+  helpIsOpen: true,
+  controlsAreOpen: false
+}
 
 class App extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      itemList: [],
-      toAdd: '',
-      sotableDisabled: true,
-      helpIsOpen: true,
-      controlsAreOpen: true
+
+    this.saveState = this.saveState.bind(this)
+    this.resetState = this.resetState.bind(this)
+    this.recoverState = this.recoverState.bind(this)
+
+    const recoveredState = this.recoverState()
+    if (recoveredState === null) {
+      this.resetState()
+    } else {
+      this.state = recoveredState
     }
 
     this.handleEnabledChange = this.handleEnabledChange.bind(this)
@@ -36,14 +45,14 @@ class App extends Component {
     this.setState({
       ...this.state,
       helpIsOpen: !this.state.helpIsOpen
-     })
+     }, this.saveState)
   }
 
   handleShowControls() {
     this.setState({
       ...this.state,
       controlsAreOpen: !this.state.controlsAreOpen
-    })
+    }, this.saveState)
   }
 
   handleEnabledChange(event) {
@@ -54,7 +63,7 @@ class App extends Component {
     this.setState({
       ...this.state,
       sotableDisabled: value
-    })
+    }, this.saveState)
   }
 
   handleItemEdit(event) {
@@ -62,7 +71,7 @@ class App extends Component {
     this.setState({
       ...this.state,
       toAdd: event.target.value
-    })
+    }, this.saveState)
   }
 
   handleNewItem() {
@@ -70,20 +79,52 @@ class App extends Component {
     if (newValue === '') {
       return
     }
-    const newItemList = [].concat(this.state.itemList, newValue)
+    const newItemList = this.state.itemList.concat(newValue)
+    console.log('new item added:', newItemList)
     this.setState({
       ...this.state,
       toAdd: '',
       itemList: newItemList
-    })
+    }, this.saveState)
+    
   }
 
   handleSortEnd = ({oldIndex, newIndex}) => {
     this.setState({
       ...this.state,
       itemList: arrayMove(this.state.itemList, oldIndex, newIndex),
-    });
+    }, this.saveState)
   };
+
+  saveState() {
+    console.log('Saving Groc State:' + this.state, this.state)
+    localStorage.setItem('grocStateData', JSON.stringify(this.state));
+  }
+
+  resetState() {
+    console.log('Resetting Groc State...')
+    // TODO: Find a better way to set state on mount and any other time:
+    this.state = initialState
+    this.setState(initialState, this.saveState)
+  }
+
+  recoverState() {
+    const grocStateDataJSON = localStorage.getItem('grocStateData');
+    let grocStateData = {}
+    if (grocStateDataJSON === null || grocStateDataJSON === '"[object Object]"') {
+      console.log('No Groc State to recover...')
+      return null
+    }
+    try {
+      grocStateData = JSON.parse(grocStateDataJSON)
+    }
+    catch(error) {
+      console.error('Groc State was invalid! Resetting it...');
+      return null
+    }
+    console.log('Got Groc State Data from localStorage:', JSON.stringify(grocStateData,0,2))
+    return grocStateData
+  }
 
   renderSortableComponent() {
     const items = this.state.itemList
@@ -98,7 +139,7 @@ class App extends Component {
         <div className='groc-outter'>
           <div className={`groc-doc column`} >
             <Collapse isOpen={this.state.helpIsOpen} className='docs'>
-              <img src={croc} className='large' />
+              <img src={croc} className={this.state.helpIsOpen ? 'large' : 'small'} />
               <p>Groc Your Grocery List!</p>
               <pre>
                 <p>1. Add items not yet on the list</p>
@@ -128,7 +169,7 @@ class App extends Component {
             <Button intent={Intent.SUCCESS} onClick={this.handleNewItem}>
               Add Item
             </Button>
-            <Collapse isOpen={this.state.controlsAreOpen} className='controls'>
+            <div>
               <label className="pt-label .modifier">
                 Disable Item Sorting:
                 <input
@@ -138,6 +179,11 @@ class App extends Component {
                   onChange={this.handleEnabledChange} />
                 {/* <Checkbox label="Toggle Resortable" onChange={this.handleEnabledChange}/> */}
               </label>
+            </div>
+            <Collapse isOpen={this.state.controlsAreOpen} className='controls'>
+              <Button onClick={this.resetState}>
+                  Reset Groc
+              </Button>
             </Collapse>
             <div>
               
@@ -145,7 +191,7 @@ class App extends Component {
           </div>
           <div className='groc-footer'>
             <p>
-              Thanks for trying Groc! <img src={croc} className='tiny' /><br/> 
+              Thanks for trying Groc! <img src={croc} className={this.state.helpIsOpen ? 'tiny' : 'small'} /><br/> 
               Suggestion? Issues? <a href="">GitHub</a>.<br/>
             </p>
             <p>
@@ -160,7 +206,6 @@ class App extends Component {
 
 const SortableItem = SortableElement(({value}) =>
   <li>
-    {/* <DragHandle /> */}
     <Checkbox label={value} className='pt-align-right pt-large'/>
   </li>
 );

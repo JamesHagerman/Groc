@@ -72,6 +72,10 @@ div {
     flex-direction: row;
 }
 
+.groc-list {
+    text-align: left;
+}
+
 .pt-collapse {
     padding: 0;
 }
@@ -86,6 +90,9 @@ img.small {
 img.tiny {
     max-width: 5%;
     text-align: left;
+}
+img.hidden {
+    display: none;
 }
 
 pre {
