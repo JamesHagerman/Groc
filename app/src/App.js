@@ -192,7 +192,7 @@ class App extends Component {
           <div className='groc-footer'>
             <p>
               Thanks for trying Groc! <img src={croc} className={this.state.helpIsOpen ? 'tiny' : 'small'} /><br/> 
-              Suggestion? Issues? <a href="">GitHub</a>.<br/>
+              Suggestion? Issues? <a href="https://github.com/JamesHagerman/Groc">GitHub</a>.<br/>
             </p>
             <p>
               © 2018 <a href='https://twitter.com/jamisnemo'>James Hagerman</a>

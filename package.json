@@ -6,7 +6,7 @@
     "start:api": "cd api/ && yarn run start",
     "start:app": "cd app/ && yarn run start",
     "start:db": "docker-compose up -d db",
-    "build": "cd app/ && yarn install && yarn run build && mv build ../docs",
+    "build": "cd app/ && yarn install && yarn run build",
     "docker:build": "docker-compose build",
     "docker:push": "docker-compose push",
     "docker:up": "docker-compose up",
