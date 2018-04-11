@@ -1,4 +1,4 @@
-/* .App {
+.App {
   text-align: center;
 }
 
@@ -16,15 +16,79 @@
 
 .App-intro {
   font-size: large;
-} */
+}
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
-
 .pt-dark {
     background-color: rgb(41, 55, 66);
     height: 100%;
 }
+
+ul {
+    list-style: none;
+    padding: 10px;
+    margin: 0px;
+}
+
+div {
+    padding: 10px;
+}
+
+.groc-outter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.groc-croc,
+.groc-doc,
+.groc-list,
+.groc-control,
+.groc-footer {
+    max-width: 350px;
+    /* border: 1px solid blue; */
+    /* max-width: 50%; */
+}
+
+.showHide {
+    margin: 5px;
+}
+
+.groc-doc {
+    display: inline;
+    /* display: flex; */
+    align-items: center;
+    justify-content: center;
+}
+
+.groc-doc.column {
+    flex-direction: column;
+}
+.groc-doc.row {
+    flex-direction: row;
+}
+
+.pt-collapse {
+    padding: 0;
+}
+
+img.large {
+    max-width: 50%;
+}
+img.small {
+    max-width: 15%;
+    text-align: left;
+}
+img.tiny {
+    max-width: 5%;
+    text-align: left;
+}
+
+pre {
+    text-align: left;
+}
+
