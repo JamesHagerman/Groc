@@ -26,7 +26,8 @@ const initialState = {
   sotableDisabled: true,
   helpIsOpen: true,
   controlsAreOpen: false,
-  checkedHidden: false
+  checkedHidden: false,
+  showDebug: false
 }
 
 class App extends Component {
@@ -51,6 +52,7 @@ class App extends Component {
     this.handleShowControls = this.handleShowControls.bind(this)
     this.handleShowChecked = this.handleShowChecked.bind(this)
     this.handleAddCommonItems = this.handleAddCommonItems.bind(this)
+    this.handleToggleDebug = this.handleToggleDebug.bind(this)
 
     // Item stuff
     this.buildNewItem = this.buildNewItem.bind(this)
@@ -58,9 +60,10 @@ class App extends Component {
     this.handleNewItem = this.handleNewItem.bind(this)
     this.handleNewItemKeyPress = this.handleNewItemKeyPress.bind(this)
     this.handleCheck = this.handleCheck.bind(this)
+    this.handleDeleteChecked = this.handleDeleteChecked.bind(this)
 
     // sortable list stuff
-    this.handleEnabledChange = this.handleEnabledChange.bind(this)
+    this.handleToggleSorting = this.handleToggleSorting.bind(this)
     this.handleSortEnd = this.handleSortEnd.bind(this)
     this.renderSortableComponent = this.renderSortableComponent.bind(this)
   }
@@ -137,6 +140,13 @@ class App extends Component {
     })
   }
 
+  handleToggleDebug() {
+    this.setState({
+      ...this.state,
+      showDebug: !this.state.showDebug
+     }, this.saveState)
+  }
+
   buildNewItem(itemName) {
     return {
       itemUuid: uuid(),
@@ -203,7 +213,20 @@ class App extends Component {
     }, this.saveState)
   }
 
-  handleEnabledChange(event) {
+  handleDeleteChecked() {
+    let newItemList = this.state.itemList.concat()
+
+    newItemList = newItemList.filter((item) => {
+      return !item.itemChecked
+    })
+
+    this.setState({
+      ...this.state,
+      itemList: newItemList
+    })
+  }
+
+  handleToggleSorting(event) {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
 
@@ -289,16 +312,19 @@ class App extends Component {
                   name="isDraggable"
                   type="checkbox"
                   checked={this.state.sotableDisabled}
-                  onChange={this.handleEnabledChange} />
+                  onChange={this.handleToggleSorting} />
                 {/* <Checkbox label="Toggle Resortable" onChange={this.handleEnabledChange}/> */}
               </label>
               <Button onClick={this.handleShowControls} className='showHide'>
-                {this.state.controlsAreOpen ? "Hide" : "Show"} Tools
+                {this.state.controlsAreOpen ? "Hide" : "Show"} Dangerous Tools
               </Button>
             </div>
             <Collapse isOpen={this.state.controlsAreOpen} className='controls'>
-              <Button onClick={this.resetState}>
+              <Button intent={Intent.DANGER} onClick={this.resetState}>
                   Reset Groc
+              </Button>
+              <Button intent={Intent.DANGER} onClick={this.handleDeleteChecked}>
+                  Delete Checked Items
               </Button>
             </Collapse>
           </div>
@@ -311,13 +337,13 @@ class App extends Component {
             <p>
               © 2018 <a href='https://twitter.com/jamisnemo'>James Hagerman</a>
             </p>
-            <Collapse isOpen={this.state.controlsAreOpen} className='debug'>
+            <a href='#' onClick={this.handleToggleDebug}>Toggle Debug Data</a>
+            <Collapse isOpen={this.state.showDebug} className='debug'>
               <div className='debug'>
                 Debug: <br />
                 {JSON.stringify(this.state)}
               </div>
             </Collapse>
-            
           </div>
 
         </div>
