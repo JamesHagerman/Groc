@@ -29,3 +29,12 @@ yarn run build
 ```
 
 Some day, maybe it'll get some more features that depend on a backend and that's what's kicking around in `api/` right now.
+
+## Deploying Groc
+
+I'm using the `gh-pages` npm package to help me deploy this to GitHub pages:
+
+```
+yarn run build
+yarn run deploy
+```
