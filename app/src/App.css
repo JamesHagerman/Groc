@@ -51,7 +51,6 @@ div {
 .groc-footer {
     max-width: 350px;
     /* border: 1px solid blue; */
-    /* max-width: 50%; */
 }
 
 .showHide {
@@ -74,6 +73,15 @@ div {
 
 .groc-list {
     text-align: left;
+} 
+
+.groc-list input {
+    float: right;
+    padding: 5px;
+}
+input[type=checkbox] {
+    transform: scale(1.5);
+    margin-left: 10px;
 }
 
 .pt-collapse {
