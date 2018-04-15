@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import uuid from 'uuid/v1'
 import '@blueprintjs/core/lib/css/blueprint.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
 import { Checkbox, Button, Collapse, Intent } from '@blueprintjs/core';
@@ -33,10 +34,15 @@ class App extends Component {
 
     this.handleEnabledChange = this.handleEnabledChange.bind(this)
     this.handleItemEdit = this.handleItemEdit.bind(this)
+
+    this.buildNewItem = this.buildNewItem.bind(this)
     this.handleNewItem = this.handleNewItem.bind(this)
+    this.handleNewItemKeyPress = this.handleNewItemKeyPress.bind(this)
+
     this.handleSortEnd = this.handleSortEnd.bind(this)
     this.handleShowHelp = this.handleShowHelp.bind(this)
     this.handleShowControls = this.handleShowControls.bind(this)
+    this.handleCheck = this.handleCheck.bind(this)
 
     this.renderSortableComponent = this.renderSortableComponent.bind(this)
   }
@@ -67,11 +73,19 @@ class App extends Component {
   }
 
   handleItemEdit(event) {
-    console.log(event.target.value)
+    // console.log(event.target.value)
     this.setState({
       ...this.state,
       toAdd: event.target.value
     }, this.saveState)
+  }
+
+  buildNewItem(itemName) {
+    return {
+      itemUuid: uuid(),
+      itemName,
+      itemChecked: false
+    }
   }
 
   handleNewItem() {
@@ -79,7 +93,8 @@ class App extends Component {
     if (newValue === '') {
       return
     }
-    const newItemList = this.state.itemList.concat(newValue)
+    const newItem = this.buildNewItem(newValue)
+    const newItemList = this.state.itemList.concat(newItem)
     console.log('new item added:', newItemList)
     this.setState({
       ...this.state,
@@ -89,6 +104,12 @@ class App extends Component {
     
   }
 
+  handleNewItemKeyPress(event) {
+    if(event.keyCode === 13) {
+      this.handleNewItem()
+    }
+  }
+
   handleSortEnd = ({oldIndex, newIndex}) => {
     this.setState({
       ...this.state,
@@ -96,13 +117,42 @@ class App extends Component {
     }, this.saveState)
   };
 
+  handleCheck(event) {
+    const target = event.target
+    const checked = target.checked
+    const uuid = target.value
+    console.log('OK!', uuid, checked)
+
+    const currentList = this.state.itemList.concat()
+    // console.log('currentList', currentList)
+    const modifiedItemId = currentList.findIndex((item, index) => {
+      // console.warn('item', item)
+      return item.itemUuid === uuid;
+    })
+
+    // console.log('modifiedItemId', modifiedItemId)
+    
+    let itemToToggle = currentList[modifiedItemId]
+    itemToToggle.itemChecked = !itemToToggle.itemChecked
+
+    // console.log('omfg:', JSON.stringify(itemToToggle, 0, 2))
+    let updatedList = currentList.splice(modifiedItemId, 1, itemToToggle)
+
+    // console.log('updatedList', updatedList)
+    this.setState({
+      ...this.state,
+      itemList: updatedList
+    }, this.saveState)
+  }
+
   saveState() {
-    console.log('Saving Groc State:' + this.state, this.state)
+    console.log('Saving Groc State:', this.state)
     localStorage.setItem('grocStateData', JSON.stringify(this.state));
   }
 
   resetState() {
     console.log('Resetting Groc State...')
+    prompt('please press ctrl+c to copy the text below', JSON.stringify(this.state))
     // TODO: Find a better way to set state on mount and any other time:
     this.state = initialState
     this.setState(initialState, this.saveState)
@@ -129,7 +179,7 @@ class App extends Component {
   renderSortableComponent() {
     const items = this.state.itemList
     return (
-      <SortableList items={items} onSortEnd={this.handleSortEnd} disabled={this.state.sotableDisabled}/>
+      <SortableList items={items} onSortEnd={this.handleSortEnd} disabled={this.state.sotableDisabled} handleCheck={this.handleCheck}/>
     )// lockAxis='y'
   }
   render() {
@@ -165,7 +215,14 @@ class App extends Component {
             {this.renderSortableComponent()}
           </div>
           <div className='groc-control'>
-            <input className="pt-input .modifier" type="text" value={this.state.toAdd} placeholder="Item Name" dir="auto" onChange={this.handleItemEdit}/>
+            <input
+              className="pt-input .modifier"
+              type="text"
+              value={this.state.toAdd}
+              placeholder="Item Name"
+              dir="auto"
+              onChange={this.handleItemEdit}
+              onKeyDown={this.handleNewItemKeyPress}/>
             <Button intent={Intent.SUCCESS} onClick={this.handleNewItem}>
               Add Item
             </Button>
@@ -184,6 +241,10 @@ class App extends Component {
               <Button onClick={this.resetState}>
                   Reset Groc
               </Button>
+              <div className='debug'>
+                Debug:
+                {JSON.stringify(this.state)}
+              </div>
             </Collapse>
             <div>
               
@@ -204,18 +265,38 @@ class App extends Component {
   }
 }
 
-const SortableItem = SortableElement(({value}) =>
-  <li>
-    <Checkbox label={value} className='pt-align-right pt-large'/>
-  </li>
-);
+const SortableItem = SortableElement((props) => {
+  const {
+    item: {
+      itemUuid,
+      itemName,
+      itemChecked
+    },
+    handleCheck
+  } = props
+  // console.warn('props', props)
+  return (
+    <li>
+      <label className="pt-label .modifier">
+        {itemName}
+        <input
+          type='checkbox'
+          value={itemUuid}
+          checked={itemChecked}
+          onChange={handleCheck} />
+        {/* <Checkbox label={value} className='pt-align-right pt-large' onClick={this.handleCheck}/> */}
+      </label>
+      
+    </li>
+  )
+});
 
 const SortableList = SortableContainer((props) => {
-  const {items, disabled} = props
+  const {items, disabled, itemChecked, handleCheck} = props
   return (
     <ul>
       {items.map((item, index) => (
-        <SortableItem key={`item-${index}`} index={index} value={item} disabled={disabled}/>
+        <SortableItem key={`item-${index}`} index={index} item={item} disabled={disabled} handleCheck={handleCheck}/>
       ))}
     </ul>
   );

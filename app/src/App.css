@@ -99,3 +99,7 @@ pre {
     text-align: left;
 }
 
+div.debug {
+    word-wrap: break-word;
+}
+

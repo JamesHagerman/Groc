@@ -1,6 +1,6 @@
 # Groc Your Grocery List
 
-When food items are being yelled out of the kitchen, you just want to capture them...
+When required food items are remembered out of the blue...
 
 When you can't remember what you purchased in the past...
 
@@ -8,7 +8,7 @@ When you can't think of anything good to eat...
 
 When you're mad at hiking back and forth through the grocery store...
 
-You could probably use `Groc`
+You can probably use `Groc`
 
 ## The Purpose
 
