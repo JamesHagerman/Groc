@@ -2,8 +2,18 @@ import React, { Component } from 'react';
 import uuid from 'uuid/v1'
 import '@blueprintjs/core/lib/css/blueprint.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
-import { Checkbox, Button, Collapse, Intent } from '@blueprintjs/core';
-import {SortableContainer, SortableElement, SortableHandle, arrayMove} from 'react-sortable-hoc';
+import {
+  // Checkbox,
+  Button,
+  Collapse,
+  Intent
+} from '@blueprintjs/core';
+import {
+  SortableContainer,
+  SortableElement,
+  // SortableHandle,
+  arrayMove
+} from 'react-sortable-hoc';
 
 import croc from './croc.png'
 import './App.css';
@@ -231,7 +241,7 @@ class App extends Component {
 
           <div className={`groc-doc column`} >
             <Collapse isOpen={this.state.helpIsOpen} className='docs'>
-              <img src={croc} className={this.state.helpIsOpen ? 'large' : 'small'} />
+              <img alt='groc logo' src={croc} className={this.state.helpIsOpen ? 'large' : 'small'} />
               <p>Groc Your Grocery List!</p>
               <pre>
                 <p>1. Add items not yet on the list</p>
@@ -295,7 +305,7 @@ class App extends Component {
 
           <div className='groc-footer'>
             <p>
-              Thanks for trying Groc! <img src={croc} className={this.state.helpIsOpen ? 'tiny' : 'small'} /><br/> 
+              Thanks for trying Groc! <img alt='another groc logo' src={croc} className={this.state.helpIsOpen ? 'tiny' : 'small'} /><br/> 
               Suggestion? Issues? <a href="https://github.com/JamesHagerman/Groc">GitHub</a>.<br/>
             </p>
             <p>
@@ -352,7 +362,6 @@ const SortableList = SortableContainer((props) => {
   const {
     items,
     disabled,
-    itemChecked,
     handleCheck,
     checkedHidden
   } = props
