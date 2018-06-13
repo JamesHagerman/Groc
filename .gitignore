@@ -8,6 +8,9 @@ coverage/
 
 build/
 
+.undodir/
+Session.vim
+
 # misc
 .DS_Store
 .env.local

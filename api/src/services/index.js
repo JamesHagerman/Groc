@@ -1,3 +1,5 @@
-// eslint-disable-next-line no-unused-vars
-module.exports = function (app) {
+const lists = require('./lists/lists.service.js');
+module.exports = function () {
+  const app = this;
+  app.configure(lists);
 };

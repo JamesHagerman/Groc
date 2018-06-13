@@ -3,10 +3,11 @@ version: '2'
 services:
 
   db:
-    image: postgres
-    restart: always
+    image: mongo
+    restart: unless-stopped
     environment:
-      POSTGRES_PASSWORD: example
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: getoutofthetreeracoon
 
 #   blog-backend:
 #     image: jameshagerman/zenpirate:blog-backend-${npm_package_dockerVersions_api}

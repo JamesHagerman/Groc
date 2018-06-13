@@ -14,25 +14,31 @@ const socketio = require('@feathersjs/socketio');
 const middleware = require('./middleware');
 const services = require('./services');
 const appHooks = require('./app.hooks');
+const mongodb = require('./mongodb');
 const channels = require('./channels');
 
 const app = express(feathers());
 
 // Load app configuration
-app.configure(configuration());
+app.configure(configuration(path.join(__dirname, '..')));
 // Enable CORS, security, compression, favicon and body parsing
 app.use(cors());
 app.use(helmet());
 app.use(compress());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
+
+//app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
 // Do not host the public folder...
 //app.use('/', express.static(app.get('public')));
+
+app.get('/health', (req, res) => res.status(200).send('OK'));
 
 // Set up Plugins and providers
 app.configure(express.rest());
 app.configure(socketio());
+
+app.configure(mongodb); // Adds mongoClient to the app
 
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);
